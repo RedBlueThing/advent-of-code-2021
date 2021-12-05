@@ -24,7 +24,6 @@ def process_row(raw_data_line, current_board_rows):
     assumes a row of numbers
     """
     assert raw_data_line, "Raw data line was %s" % raw_data_line
-    print(raw_data_line)
     try:
         current_board_rows.append([{
             "matched": False,

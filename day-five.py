@@ -1,4 +1,5 @@
 import functools
+import pygame
 
 test_data = [
     "0,9 -> 5,9", "8,0 -> 0,8", "9,4 -> 3,4", "2,2 -> 2,1", "7,0 -> 7,4", "6,4 -> 2,0", "0,9 -> 2,9", "3,4 -> 1,4",
@@ -35,8 +36,44 @@ def seafloor_pixel_index(x, y, seafloor_width, seafloor_height):
 def draw_seafloor(seafloor, seafloor_width, seafloor_height):
     for y in range(0, seafloor_height):
         for x in range(0, seafloor_width):
-            print(seafloor[seafloor_pixel_index(x, y, seafloor_width, seafloor_height)], end="")
+            index = seafloor_pixel_index(x, y, seafloor_width, seafloor_height)
+            pixel = seafloor[index]
+            print(pixel if pixel > 0 else ".", end="")
         print("")
+
+
+def render_seafloor(seafloor, seafloor_width, seafloor_height):
+    pygame.init()
+    screen = pygame.display.set_mode((seafloor_width, seafloor_height))
+    screenrect = screen.get_rect()
+    background = pygame.Surface(screen.get_size())  #create surface for background
+    background.fill((255, 255, 255))  #fill the background white (red,green,blue)
+    clock = pygame.time.Clock()  #create pygame clock object
+    mainloop = True
+    FPS = 60  # desired max. framerate in frames per second.
+
+    while mainloop:
+        milliseconds = clock.tick(FPS)  # milliseconds passed since last frame
+        seconds = milliseconds / 1000.0  # seconds passed since last frame (float)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                mainloop = False  # pygame window closed by user
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    mainloop = False  # user pressed ESC
+
+        background.fill((0, 0, 0))
+
+        for y in range(0, seafloor_height):
+            for x in range(0, seafloor_width):
+                index = seafloor_pixel_index(x, y, seafloor_width, seafloor_height)
+                pixel = seafloor[index] * 40
+                background.set_at((x, y), (pixel,pixel,pixel))
+
+        screen.blit(background, (0, 0))  #draw background on screen (overwriting all)
+
+        pygame.display.flip()  # flip the screen 30 times a second
+
 
 
 def update_seafloor_pixel(seafloor, x, y, seafloor_width, seafloor_height):
@@ -86,7 +123,7 @@ def draw_vent_line_part_two(seafloor, x1, y1, x2, y2, seafloor_width, seafloor_h
     def offset(value):
         if not value:
             return 0
-        return int(value/abs(value))
+        return int(value / abs(value))
 
     while (current_x != x2 and current_y != y2):
         seafloor = update_seafloor_pixel(seafloor, current_x, current_y, seafloor_width, seafloor_height)
@@ -107,6 +144,9 @@ def process_vent_line_data(data, draw_vent_line_fn, do_draw_seafloor=True):
     seafloor_width = max([max(x1, x2) for x1, y1, x2, y2 in lines]) + 1
     seafloor_height = max([max(y1, y2) for x1, y1, x2, y2 in lines]) + 1
 
+    print(seafloor_height)
+    print(seafloor_width)
+
     # So now we can create a kind of screen buffer for the sea floor
     seafloor = [0 for i in range(0, seafloor_width * seafloor_height)]
 
@@ -117,6 +157,8 @@ def process_vent_line_data(data, draw_vent_line_fn, do_draw_seafloor=True):
 
     if (do_draw_seafloor):
         draw_seafloor(seafloor, seafloor_width, seafloor_height)
+    # else:
+    #     render_seafloor(seafloor, seafloor_width, seafloor_height)
 
     return len([x for x in seafloor if x > 1])
 
@@ -127,10 +169,10 @@ print(test_overlaps_part_one == expected_overlaps_part_one)
 test_overlaps_part_two = process_vent_line_data(test_data, draw_vent_line_part_two)
 print(test_overlaps_part_two == expected_overlaps_part_two)
 
-f = open('day-five-input.txt')
+f = open('/Users/tomhorn/dev/advent-2021/day-five-input.txt')
 print(process_vent_line_data(f.readlines(), draw_vent_line_part_one, do_draw_seafloor=False))
 f.close()
 
-f = open('day-five-input.txt')
+f = open('/Users/tomhorn/dev/advent-2021/day-five-input.txt')
 print(process_vent_line_data(f.readlines(), draw_vent_line_part_two, do_draw_seafloor=False))
 f.close()
