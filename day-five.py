@@ -144,9 +144,6 @@ def process_vent_line_data(data, draw_vent_line_fn, do_draw_seafloor=True):
     seafloor_width = max([max(x1, x2) for x1, y1, x2, y2 in lines]) + 1
     seafloor_height = max([max(y1, y2) for x1, y1, x2, y2 in lines]) + 1
 
-    print(seafloor_height)
-    print(seafloor_width)
-
     # So now we can create a kind of screen buffer for the sea floor
     seafloor = [0 for i in range(0, seafloor_width * seafloor_height)]
 
@@ -169,10 +166,10 @@ print(test_overlaps_part_one == expected_overlaps_part_one)
 test_overlaps_part_two = process_vent_line_data(test_data, draw_vent_line_part_two)
 print(test_overlaps_part_two == expected_overlaps_part_two)
 
-f = open('/Users/tomhorn/dev/advent-2021/day-five-input.txt')
+f = open('day-five-input.txt')
 print(process_vent_line_data(f.readlines(), draw_vent_line_part_one, do_draw_seafloor=False))
 f.close()
 
-f = open('/Users/tomhorn/dev/advent-2021/day-five-input.txt')
+f = open('day-five-input.txt')
 print(process_vent_line_data(f.readlines(), draw_vent_line_part_two, do_draw_seafloor=False))
 f.close()
