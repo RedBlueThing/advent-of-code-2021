@@ -19,12 +19,13 @@ def fuel_cost_part_one(crab_positions, target_position):
     return sum([abs(position - target_position) for position in crab_positions])
 
 
-def countdown_array(total_steps):
-    return [total_steps - x for x in range(0, total_steps)]
+def triangular_numbers(total_steps):
+    # Triangular numbers!!!!! 6+5+4+3+2+1 == 6 * (6 + 1) / 2
+    return total_steps * (total_steps + 1) / 2
 
 
 def fuel_cost_part_two(crab_positions, target_position):
-    return sum([sum(countdown_array(abs(position - target_position))) for position in crab_positions])
+    return sum([triangular_numbers(abs(position - target_position)) for position in crab_positions])
 
 
 def calculate_cheapest_fuel_cost(crab_positions, fuel_cost_fn):
