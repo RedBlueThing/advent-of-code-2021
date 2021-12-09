@@ -149,7 +149,7 @@ def digits_for_known_and_unknown_signals(known_signals, unknown_signals):
     six_nine = list(filter(lambda signal: signal != zero, zero_six_nine))
     # six shares one character with 7, but nine shares two
     six = list(filter(lambda signal: len(signal_to_set(signal).intersection(signal_to_set(seven))) == 2, six_nine))[0]
-    nine = list(filter(lambda signal: len(signal_to_set(signal).intersection(signal_to_set(seven))) == 3, six_nine))[0]
+    nine = list(filter(lambda signal: signal != six, six_nine))[0]
     five = list(filter(lambda signal: len(signal_to_set(signal).intersection(signal_to_set(nine))) == 5, two_five))[0]
     two = list(filter(lambda signal: signal != five, two_five))[0]
 
