@@ -59,7 +59,7 @@ def get_pair(character):
     return pair_dictionary.get(character)
 
 
-def syntax_check_line(line):
+def check_line(line):
     character_stack = []
     for character in line:
         if not is_closing(character):
@@ -73,11 +73,11 @@ def syntax_check_line(line):
 
 
 def syntax_check(data):
-    return list(filter(lambda char: type(char) is not list, [syntax_check_line(line) for line in data]))
+    return list(filter(lambda char: type(char) is not list, [check_line(line) for line in data]))
 
 
 def autocomplete_check(data):
-    return list(filter(lambda char: type(char) is list, [syntax_check_line(line) for line in data]))
+    return list(filter(lambda char: type(char) is list, [check_line(line) for line in data]))
 
 def middle_autocomplete_score(scores):
     return sorted(scores)[int(len(scores)/2):][0]

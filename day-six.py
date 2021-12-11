@@ -1,6 +1,6 @@
 import functools
 import pygame
-import threading
+from itertools import groupby
 
 test_data = "3,4,3,1,2"
 
