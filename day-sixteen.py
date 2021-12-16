@@ -44,18 +44,6 @@ def consume_literal_packet(binary_char_buffer, current_offset, version):
     # we found the last chunk, so get the literal value
     _, literal_value = consume_value(group_buffer, 0, len(group_buffer))
 
-    # advance the current offset by the remaining bits
-    version_and_type_length = 6
-
-    # we need to take this into account for working out the padding bits at the
-    # end
-    # literal_chunk_data_length = version_and_type_length + (current_offset - starting_offset)
-    # if (literal_chunk_data_length % 4):
-    #     current_offset, padding_bits = consume_value(binary_char_buffer, current_offset,
-    #                                                  4 - (literal_chunk_data_length % 4))
-    #     assert padding_bits == 0, "Bits were %d, literal_chunk_data_length was %d" % (padding_bits,
-    #                                                                                   literal_chunk_data_length)
-
     return current_offset, {"type_id": 4, "version": version, "value": literal_value}
 
 
