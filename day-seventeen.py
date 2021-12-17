@@ -62,21 +62,24 @@ def try_starting_velocity(target, velocity):
             return -1, False
 
 
-brute_force_range = range(-200, 200)
+brute_force_range = 200
+
+
+def brute_force_attempts(target):
+    return flatten([[(try_starting_velocity(target,
+                                            (test_x_velocity, test_y_velocity)), test_x_velocity, test_y_velocity)
+                     for test_x_velocity in range(0, brute_force_range)]
+                    for test_y_velocity in range(-brute_force_range, brute_force_range)])
+
 
 def calculated_maximum_y(target):
     # attempt a range of starting velocities
-    attempts = flatten(
-        [[try_starting_velocity(target, (test_x_velocity, test_y_velocity)) for test_x_velocity in brute_force_range]
-         for test_y_velocity in brute_force_range])
-    return max([attempt[0] for attempt in attempts]) if attempts else 0
+    return max([attempt[0][0] for attempt in brute_force_attempts(target)])
 
 
 def calculate_firing_solutions(target):
-    attempts = flatten([[(try_starting_velocity(target,
-                                                (test_x_velocity, test_y_velocity)), test_x_velocity, test_y_velocity)
-                         for test_x_velocity in brute_force_range] for test_y_velocity in brute_force_range])
-    return {(test_x_velocity, test_y_velocity) for result, test_x_velocity, test_y_velocity in attempts if result[1]}
+    return {(test_x_velocity, test_y_velocity)
+            for result, test_x_velocity, test_y_velocity in brute_force_attempts(target) if result[1]}
 
 
 assert parse_input("target area: x=20..30, y=-10..-5") == (20, 30, -10, -5)
