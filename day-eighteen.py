@@ -2,6 +2,14 @@ import functools
 import math
 from enum import Enum
 
+def flatten(items):
+    """Yield items from any nested iterable; see Reference."""
+    for x in items:
+        if isinstance(x, list) and not isinstance(x, (str, bytes)):
+            yield from flatten(x)
+        else:
+            yield x
+
 test_data = [
     "[[[0,[5,8]],[[1,7],[9,6]]],[[4,[1,2]],[[1,4],2]]]\n", "[[[5,[2,8]],4],[5,[[9,9],0]]]\n",
     "[6,[[[6,2],[5,6]],[[7,6],[4,7]]]]\n", "[[[6,[0,7]],[0,9]],[4,[9,[9,0]]]]\n",
@@ -241,3 +249,6 @@ for test in add_then_reduce_tests:
 
 final_pair_tree = functools.reduce(lambda a,b: add_then_reduce(a,b), real_data)
 print(calculate_magnitude(final_pair_tree))
+
+# Part Two
+print(max(flatten([[calculate_magnitude(add_then_reduce(a,b)) for a in real_data] for b in real_data])))
