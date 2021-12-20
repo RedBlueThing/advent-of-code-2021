@@ -67,12 +67,11 @@ next_left_right_tests = [([[[[[9, 8], 99], 2], 3], 4], (None, 99)), ([7, [6, [5,
 
 
 class Node:
-    def __init__(self, value, depth, parent):
+    def __init__(self, value, depth):
         self.left = None
         self.right = None
         self.value = value
         self.depth = depth
-        self.parent = parent
 
     @property
     def leaf(self):
@@ -88,14 +87,14 @@ class Node:
         return str(self.value)
 
 
-def build_tree(value, depth=0, parent=None):
+def build_tree(value, depth=0):
 
     assert not isinstance(value, Node)
 
     if (not isinstance(value, list)):
-        return Node(value, depth, parent)
+        return Node(value, depth)
 
-    node = Node(None, depth, parent)
+    node = Node(None, depth)
     left_value = value[0]
     right_value = value[1]
     node.left = build_tree(left_value, depth + 1, node)
