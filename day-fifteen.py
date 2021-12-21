@@ -1,6 +1,5 @@
 import functools
 from enum import Enum
-from itertools import groupby
 
 
 def flatten(items):

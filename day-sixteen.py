@@ -1,6 +1,5 @@
 import functools
 from enum import Enum
-from itertools import groupby
 
 hex_bits_packet = "D2FE28"
 binary_equivalent = "110100101111111000101000"
