@@ -71,48 +71,46 @@ def simulate_universes(starting_positions, winning_score=21):
 
     # key is position for player one, position for player two, and their respective scores
     # value is the number of universes that match that key. We start with just one universe.
-    universes[(starting_positions[0], starting_positions[0], 0, 0)] = 1
+    universes[(starting_positions[0], starting_positions[1], 0, 0)] = 1
+
+    def finished(universe):
+        key, value = universe
+        return key[2] >= winning_score or key[3] >= winning_score
 
     def universes_with_unfinished_games(universes):
-        return defaultdict(None,{key: value for key, value in universes.items() if key[2] < winning_score and key[3] < winning_score})
-
-    def universes_with_finished_games(universes):
-        return defaultdict(None,{key: value for key, value in universes.items() if key[2] >= winning_score or key[3] >= winning_score})
+        return defaultdict(None,{key: value for key, value in universes.items() if not finished((key, value))})
 
     round = 0
 
     while (universes_with_unfinished_games(universes)):
 
-        next_universes = universes_with_finished_games(universes)
+        next_universes = defaultdict(int)
 
         # While there exist any universes without both players having won
-        for player_one_position, player_two_position, player_one_score, player_two_score in universes_with_unfinished_games(
-                universes):
+        for key in universes:
 
-            # active player this round
-            position = player_one_position if round == 0 else player_two_position
-            score = player_one_score if round == 0 else player_two_score
+            player_one_position, player_two_position, player_one_score, player_two_score = key
+            if (finished((key, 0))):
+                next_universes[key] += universes[key]
+            else:
+                # active player this round
+                position = player_one_position if round == 0 else player_two_position
+                score = player_one_score if round == 0 else player_two_score
 
-            # This universe will generate a bunch of extra universes when we roll the dice
-            for steps, count in single_round_roll_universes.items():
+                # This universe will generate a bunch of extra universes when we roll the dice
+                for steps, count in single_round_roll_universes.items():
 
-                new_position = new_position_for_board(10, position, steps)
-                new_score = score + new_position
+                    new_position = new_position_for_board(10, position, steps)
+                    new_score = score + new_position
 
-                key = (new_position, player_two_position, new_score,
-                       player_two_score) if round == 0 else (player_one_position, new_position, player_one_score,
-                                                             new_score)
+                    updated_key = (new_position, player_two_position, new_score,
+                        player_two_score) if round == 0 else (player_one_position, new_position, player_one_score,
+                                                                new_score)
 
-                next_universes[key] = (next_universes.get(key) or 0) + ((universes.get(key) or 1) * count)
+                    next_universes[updated_key] += count * universes[key]
 
-        universes = next_universes
         round = 1 if round == 0 else 0
-        print("%d -> " % (len(next_universes)), end="")
-        print( sum(next_universes.values()) )
+        universes = next_universes
 
-    player_one_wins = sum([count for key, count in universes.items() if key[2] >= winning_score])
-    player_two_wins = sum([count for key, count in universes.items() if key[3] >= winning_score])
-
-    print(player_one_wins)
-    print(player_two_wins)
-    return max([player_one_wins, player_two_wins])
+    return max(sum([count for key, count in universes.items() if key[2] >= winning_score]),
+    sum([count for key, count in universes.items() if key[3] >= winning_score]))
