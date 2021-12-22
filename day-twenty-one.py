@@ -9,6 +9,14 @@ from itertools import groupby
 test_data = [4, 8]
 real_data = [3, 7]
 
+def flatten(items):
+    """Yield items from any nested iterable; see Reference."""
+    for x in items:
+        if isinstance(x, list) and not isinstance(x, (str, bytes)):
+            yield from flatten(x)
+        else:
+            yield x
+
 
 class Dice:
     def __init__(self, sides=100, deterministic=True):
