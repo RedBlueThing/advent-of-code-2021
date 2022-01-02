@@ -1,4 +1,8 @@
+#
+#
 # The first digit
+#
+#
 inp w
 # No-op
 mul x 0
@@ -34,25 +38,45 @@ add y 4
 mul y x
 # z is zero, so z is now the input digit + 4
 add z y
+#
+#
 # The second digit
+#
+#
 inp w
+# x becomes zero
 mul x 0
+# z + x. Because x is zero x becomes z (digit + 4 from part one)
 add x z
+# Mod 26 on first digit + 4?
 mod x 26
+# No-op
 div z 1
+# Then add 11 to x
 add x 11
+# Is ((digit one + 4) % 26) + 11 equal to the current digit? If they are x becomes 1
 eql x w
+# Invert x
 eql x 0
+# y = 0
 mul y 0
+# y 25
 add y 25
+# y stays as 25 or is set to zero based on previous vs current digit compare
 mul y x
+# y + 1 in either case
 add y 1
 mul z y
+# Reset y
 mul y 0
 add y w
 add y 10
 mul y x
 add z y
+#
+#
+#
+#
 inp w
 mul x 0
 add x z
