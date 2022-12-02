@@ -190,17 +190,20 @@ def apply_ranges(ranges, fn, core_state):
     return core_state
 
 
-expected_on_cubes = 590784
-test_ranges = filter_bounds(process_lines(test_data_part_one))
-real_ranges = filter_bounds(process_lines(real_data))
-assert sum(apply_ranges(test_ranges, apply_range_naive, {}).values()) == expected_on_cubes
-assert calculate_lit_cubes_for_scale(apply_ranges(test_ranges, apply_range_scale, [])) == expected_on_cubes
+# expected_on_cubes = 590784
+# test_ranges = filter_bounds(process_lines(test_data_part_one))
+# real_ranges = filter_bounds(process_lines(real_data))
+# assert sum(apply_ranges(test_ranges, apply_range_naive, {}).values()) == expected_on_cubes
+# assert calculate_lit_cubes_for_scale(apply_ranges(test_ranges, apply_range_scale, [])) == expected_on_cubes
 # print(sum(apply_ranges(real_ranges, apply_range_naive, {}).values()))
 
 expected_on_cubes_part_two = 2758514936282235
 test_ranges = process_lines(test_data_part_two)
 real_ranges = process_lines(real_data)
 
+import time
+x = time.perf_counter()
 assert calculate_lit_cubes_for_scale(apply_ranges(test_ranges, apply_range_scale, [])) == expected_on_cubes_part_two
+print(time.perf_counter() - x)
 print(calculate_lit_cubes_for_scale(apply_ranges(real_ranges, apply_range_scale, [])))
 
